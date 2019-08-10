@@ -41,11 +41,19 @@ def create():
 
 
 def copy(entry):
-    pass
+    text = entry.get("1.0", tk.END)
+    root.clipboard_clear()
+    root.clipboard_append(text)
 
 
 def save():
-    pass
+    save_list = []
+    for k in range(current_range):
+        save_list.append(entries[k].get("1.0", tk.END))
+
+    with open(input_path, 'w', encoding="UTF-8") as f:
+        for item in save_list:
+            f.write("%s" % item)
 
 
 create()
