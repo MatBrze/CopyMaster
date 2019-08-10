@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import messagebox as msb
 from PIL import ImageTk, Image
 from functools import partial
 
@@ -40,6 +41,16 @@ def create():
         b_save.grid(row=22, column=1, columnspan=4, padx=5, pady=5)
 
 
+def insert():
+    if current_range <= 20:
+        for j in range(current_range):
+            entries[j].insert("1.0", inputs[j])
+    else:
+        for j in range(20):
+            entries[j].insert("1.0", inputs[j])
+        msb.showinfo("Out of scope", "Only 20 lines allowed in current version! Please adjust input file")
+
+
 def copy(entry):
     text = entry.get("1.0", tk.END)
     root.clipboard_clear()
@@ -57,4 +68,5 @@ def save():
 
 
 create()
+insert()
 root.mainloop()
