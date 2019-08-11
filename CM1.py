@@ -1,3 +1,4 @@
+import sys
 import os
 import tkinter as tk
 from tkinter import messagebox as msb
@@ -9,19 +10,15 @@ root.title("Copy Master 5000")
 root.configure(background='#88CAD4')
 
 
-def resource_path(relative):
-    return os.path.join(
-        os.environ.get(
-            "_MEIPASS2",
-            os.path.abspath(".")
-        ),
-        relative
-    )
+def resource_path(relative_path):
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath("."), relative_path)
 
 
-logo_path = resource_path("C:/Users/mateu/PycharmProjects/CopyMaster/Images/icon-clipboard.png")
-icon_path = resource_path("C:/Users/mateu/PycharmProjects/CopyMaster/Images/CM_Icon.png")
-input_path = resource_path("C:/Users/mateu/PycharmProjects/CopyMaster/Data/input.txt")
+logo_path = resource_path("Images/icon-clipboard.png")
+icon_path = resource_path("Images/CM_Icon.png")
+input_path = resource_path("Data/input.txt")
 
 icon = ImageTk.PhotoImage(Image.open(icon_path))
 panel = tk.Label(root, image=icon)
