@@ -7,7 +7,7 @@ from functools import partial
 
 root = tk.Tk()
 root.title("Copy Master 5000")
-root.configure(background='#88CAD4')
+root.configure(background='#64727f')
 
 
 def resource_path(relative_path):
@@ -43,10 +43,10 @@ def create():
         buttons.append(tk.Button(root))
         photos.append(tk.PhotoImage(file=logo_path))
         action_with_arg = partial(copy, entries[i])
-        buttons[i].config(image=photos[i], width="35", height="35", bg="white", command=action_with_arg)
+        buttons[i].config(image=photos[i], width="35", height="35", bg="#bdf2f5", command=action_with_arg)
         buttons[i].grid(row=3 + i, column=1, padx=5, pady=5)
 
-        b_save = tk.Button(root, bg="lightgreen")
+        b_save = tk.Button(root, bg="#bdf2f5")
         b_save.config(text='Save current entries', command=save)
         b_save.grid(row=22, column=1, columnspan=4, padx=5, pady=5)
 
@@ -62,7 +62,7 @@ def insert():
 
 
 def copy(entry):
-    text = entry.get("1.0", tk.END)
+    text = entry.get("1.0", tk.END).strip()
     root.clipboard_clear()
     root.clipboard_append(text)
 
@@ -79,4 +79,7 @@ def save():
 
 create()
 insert()
+
+root.lift()
+root.call('wm', 'attributes', '.', '-topmost', True)
 root.mainloop()
