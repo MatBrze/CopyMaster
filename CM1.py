@@ -9,36 +9,6 @@ from functools import partial
 root = tk.Tk()
 root.title("Copy Master 5000")
 root.configure(background='#64727f')
-menubar = tk.Menu(root)
-filemenu = tk.Menu(menubar, tearoff=0)
-filemenu.add_command(label="New")
-filemenu.add_command(label="Open")
-filemenu.add_command(label="Save")
-filemenu.add_command(label="Save as...")
-filemenu.add_command(label="Close")
-
-filemenu.add_separator()
-
-filemenu.add_command(label="Exit", command=root.quit)
-menubar.add_cascade(label="File", menu=filemenu)
-editmenu = tk.Menu(menubar, tearoff=0)
-editmenu.add_command(label="Undo")
-
-editmenu.add_separator()
-
-editmenu.add_command(label="Cut")
-editmenu.add_command(label="Copy")
-editmenu.add_command(label="Paste")
-editmenu.add_command(label="Delete")
-editmenu.add_command(label="Select All")
-
-menubar.add_cascade(label="Edit", menu=editmenu)
-helpmenu = tk.Menu(menubar, tearoff=0)
-helpmenu.add_command(label="Help Index")
-helpmenu.add_command(label="About...")
-menubar.add_cascade(label="Help", menu=helpmenu)
-
-root.config(menu=menubar)
 
 
 def resource_path(relative_path):
@@ -77,10 +47,6 @@ def create():
         buttons[i].config(image=photos[i], width="35", height="35", bg="#bdf2f5", command=action_with_arg)
         buttons[i].grid(row=3 + i, column=1, padx=5, pady=5)
 
-        b_save = tk.Button(root, bg="#bdf2f5")
-        b_save.config(text='Save current entries', command=save)
-        b_save.grid(row=22, column=1, columnspan=4, padx=5, pady=5)
-
 
 def insert():
     if current_range <= 20:
@@ -108,9 +74,44 @@ def save():
             f.write("%s" % item)
 
 
-create()
-insert()
+def on_top():
+    root.lift()
+    root.call('wm', 'attributes', '.', '-topmost', True)
 
-root.lift()
-root.call('wm', 'attributes', '.', '-topmost', True)
+
+menubar = tk.Menu(root)
+
+filemenu = tk.Menu(menubar, tearoff=0)
+filemenu.add_command(label="New", command=create)
+filemenu.add_command(label="Open")
+filemenu.add_command(label="Save", command=save)
+filemenu.add_command(label="Save as...")
+filemenu.add_command(label="Load", command=insert)
+filemenu.add_command(label="Close")
+filemenu.add_separator()
+filemenu.add_command(label="Exit", command=root.quit)
+menubar.add_cascade(label="File", menu=filemenu)
+
+editmenu = tk.Menu(menubar, tearoff=0)
+editmenu.add_command(label="Undo")
+editmenu.add_separator()
+editmenu.add_command(label="Cut")
+editmenu.add_command(label="Copy")
+editmenu.add_command(label="Paste")
+editmenu.add_command(label="Delete")
+editmenu.add_command(label="Select All")
+menubar.add_cascade(label="Edit", menu=editmenu)
+
+viewmenu = tk.Menu(menubar, tearoff=0)
+viewmenu.add_command(label="On Top", command=on_top)
+menubar.add_cascade(label="View", menu=viewmenu)
+
+helpmenu = tk.Menu(menubar, tearoff=0)
+helpmenu.add_command(label="Help Index")
+helpmenu.add_command(label="About...")
+menubar.add_cascade(label="Help", menu=helpmenu)
+
+
+root.config(menu=menubar)
+
 root.mainloop()
