@@ -2,6 +2,7 @@ import sys
 import os
 import tkinter as tk
 from tkinter import messagebox as msb
+from tkinter import filedialog
 from PIL import ImageTk, Image
 from functools import partial
 
@@ -79,11 +80,16 @@ def on_top():
     root.call('wm', 'attributes', '.', '-topmost', True)
 
 
+def open_file():
+    root.filename = filedialog.askopenfilename(initialdir="/", title="Select file",
+                                               filetypes=(("jpeg files", "*.jpg"), ("all files", "*.*")))
+
+
 menubar = tk.Menu(root)
 
 filemenu = tk.Menu(menubar, tearoff=0)
 filemenu.add_command(label="New", command=create)
-filemenu.add_command(label="Open")
+filemenu.add_command(label="Open", command=open_file)
 filemenu.add_command(label="Save", command=save)
 filemenu.add_command(label="Save as...")
 filemenu.add_command(label="Load", command=insert)
