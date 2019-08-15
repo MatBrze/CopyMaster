@@ -26,16 +26,21 @@ icon = ImageTk.PhotoImage(Image.open(icon_path))
 panel = tk.Label(root, image=icon)
 panel.grid(row=1, column=1, columnspan=3)
 
-with open(input_path, 'r', encoding="UTF-8") as f:
-    inputs = []
-    for line in f:
-        line = line.strip()
-        inputs.append(line)
-
-current_range = len(inputs)
 buttons = []
 photos = []
 entries = []
+
+
+def create_input(path):
+    with open(path, 'r', encoding="UTF-8") as f:
+        inputs = []
+        for line in f:
+            line = line.strip()
+            inputs.append(line)
+    return inputs
+
+
+current_range = len(create_input(input_path))
 
 
 def create():
@@ -49,14 +54,17 @@ def create():
         buttons[i].grid(row=3 + i, column=1, padx=5, pady=5)
 
 
-def insert():
+def insert(path):
     if current_range <= 20:
         for j in range(current_range):
-            entries[j].insert("1.0", inputs[j])
+            entries[j].insert("1.0", create_input(path)[j])
     else:
         for j in range(20):
-            entries[j].insert("1.0", inputs[j])
+            entries[j].insert("1.0", create_input(path)[j])
         msb.showinfo("Out of scope", "Only 20 lines allowed in current version! Please adjust input file")
+
+
+insert_from_path = partial(insert, input_path)
 
 
 def copy(entry):
@@ -82,7 +90,8 @@ def on_top():
 
 def open_file():
     root.filename = filedialog.askopenfilename(initialdir="/", title="Select file",
-                                               filetypes=(("jpeg files", "*.jpg"), ("all files", "*.*")))
+                                               filetypes=(("text files", "*.txt"), ("all files", "*.*")))
+    insert(root.filename)
 
 
 menubar = tk.Menu(root)
@@ -92,7 +101,7 @@ filemenu.add_command(label="New", command=create)
 filemenu.add_command(label="Open", command=open_file)
 filemenu.add_command(label="Save", command=save)
 filemenu.add_command(label="Save as...")
-filemenu.add_command(label="Load", command=insert)
+filemenu.add_command(label="Load", command=insert_from_path)
 filemenu.add_command(label="Close")
 filemenu.add_separator()
 filemenu.add_command(label="Exit", command=root.quit)
@@ -117,7 +126,7 @@ helpmenu.add_command(label="Help Index")
 helpmenu.add_command(label="About...")
 menubar.add_cascade(label="Help", menu=helpmenu)
 
-
+create()
 root.config(menu=menubar)
 
 root.mainloop()
