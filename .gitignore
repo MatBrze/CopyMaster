@@ -8,3 +8,7 @@
 .idea/workspace.xml
 copy_master_4.py
 venv/
+/CM2.py
+Images/CM5000.ico
+__pycache__/
+output/

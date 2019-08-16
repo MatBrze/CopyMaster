@@ -88,6 +88,11 @@ def on_top():
     root.call('wm', 'attributes', '.', '-topmost', True)
 
 
+def off_top():
+    root.lift()
+    root.call('wm', 'attributes', '.', '-topmost', False)
+
+
 def open_file():
     root.filename = filedialog.askopenfilename(initialdir="/", title="Select file",
                                                filetypes=(("text files", "*.txt"), ("all files", "*.*")))
@@ -119,6 +124,7 @@ menubar.add_cascade(label="Edit", menu=editmenu)
 
 viewmenu = tk.Menu(menubar, tearoff=0)
 viewmenu.add_command(label="On Top", command=on_top)
+viewmenu.add_command(label="Off Top", command=off_top)
 menubar.add_cascade(label="View", menu=viewmenu)
 
 helpmenu = tk.Menu(menubar, tearoff=0)
