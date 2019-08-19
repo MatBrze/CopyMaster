@@ -31,7 +31,8 @@ entries = []
 
 
 def initial():
-    create_widgets(10)
+    create_widgets(initial_length)
+    insert(initial_path)
 
 
 def inputs_list(path=initial_path):
