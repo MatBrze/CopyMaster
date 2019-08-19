@@ -1,7 +1,6 @@
 import sys
 import os
 import tkinter as tk
-from tkinter import messagebox as msb
 from tkinter import filedialog
 from PIL import ImageTk, Image
 from functools import partial
@@ -43,8 +42,8 @@ def create_input(path):
 current_range = len(create_input(input_path))
 
 
-def create():
-    for i in range(current_range):
+def create(number_of_entries):
+    for i in range(number_of_entries):
         entries.append(tk.Text(root, width=25, height=1))
         entries[i].grid(row=3 + i, column=2, columnspan=3, padx=10, pady=5)
         buttons.append(tk.Button(root))
@@ -54,14 +53,12 @@ def create():
         buttons[i].grid(row=3 + i, column=1, padx=5, pady=5)
 
 
+create_entries = partial(create, current_range)
+
+
 def insert(path):
-    if current_range <= 20:
-        for j in range(current_range):
-            entries[j].insert("1.0", create_input(path)[j])
-    else:
-        for j in range(20):
-            entries[j].insert("1.0", create_input(path)[j])
-        msb.showinfo("Out of scope", "Only 20 lines allowed in current version! Please adjust input file")
+    for j in range(current_range):
+        entries[j].insert("1.0", create_input(path)[j])
 
 
 insert_from_path = partial(insert, input_path)
@@ -94,9 +91,15 @@ def off_top():
 
 
 def open_file():
-    root.filename = filedialog.askopenfilename(initialdir="/", title="Select file",
-                                               filetypes=(("text files", "*.txt"), ("all files", "*.*")))
-    insert(root.filename)
+    try:
+        root.filename = filedialog.askopenfilename(initialdir="/", title="Select file",
+                                                   filetypes=(("text files", "*.txt"), ("all files", "*.*")))
+        create_input(root.filename)
+        length = len(create_input(root.filename))
+        create(length)
+        insert(root.filename)
+    except FileNotFoundError:
+        pass
 
 
 menubar = tk.Menu(root)
@@ -132,7 +135,8 @@ helpmenu.add_command(label="Help Index")
 helpmenu.add_command(label="About...")
 menubar.add_cascade(label="Help", menu=helpmenu)
 
-create()
+# create(current_range)
+# insert(input_path)
 root.config(menu=menubar)
 
 root.mainloop()
