@@ -97,8 +97,8 @@ def copy(entry):
 
 def save():
     save_list = []
-    for k in range(current_range):
-        save_list.append(entries[k].get("1.0", tk.END))
+    for k in entries:
+        save_list.append(k.get("1.0", tk.END))
 
     with open(initial_path, 'w', encoding="UTF-8") as f:
         for item in save_list:
