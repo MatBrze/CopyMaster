@@ -39,12 +39,20 @@ buttons = []
 photos = []
 
 
+def new():
+    if len(entries) == 10:
+        remove()
+    else:
+        create_widgets(initial_length)
+        remove()
+
+
 def initial():
     try:
         remove()
     except IndexError:
         pass
-    create_widgets(initial_length)
+    create_widgets(check_length(initial_path))
     insert(initial_path)
 
 
@@ -62,6 +70,9 @@ def check_length(path=initial_path):
 
 
 def create_widgets(number_of_entries):
+    if len(entries) > 0:
+        for w in list(widgets_frame.children.values()):
+            w.grid_forget()
     for i in range(number_of_entries):
         entries.append(tk.Text(widgets_frame, width=25, height=1))
         entries[i].grid(row=0 + i, column=2, columnspan=3, padx=10, pady=5)
@@ -131,10 +142,9 @@ def open_file():
 menubar = tk.Menu(menu_frame)
 
 filemenu = tk.Menu(menubar, tearoff=0)
-filemenu.add_command(label="New", command=initial)
+filemenu.add_command(label="New", command=new)
 filemenu.add_command(label="Open", command=open_file)
 filemenu.add_command(label="Save", command=save)
-filemenu.add_command(label="Clear", command=remove)
 filemenu.add_separator()
 filemenu.add_command(label="Exit", command=root.quit)
 menubar.add_cascade(label="File", menu=filemenu)
@@ -144,7 +154,7 @@ viewmenu.add_command(label="On Top", command=on_top)
 viewmenu.add_command(label="Off Top", command=off_top)
 menubar.add_cascade(label="View", menu=viewmenu)
 
-
+initial()
 root.config(menu=menubar)
 
 root.mainloop()
