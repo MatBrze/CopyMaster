@@ -68,6 +68,14 @@ current_range = len(inputs_list())
 # create_widgets_command = partial(create_widgets, current_range)
 
 
+def remove(path):
+    for j in range(len(inputs_list(path))):
+        entries[j].delete("1.0", tk.END)
+
+
+remove_from_path = partial(remove, initial_path)
+
+
 def insert(path):
     for j in range(len(inputs_list(path))):
         entries[j].insert("1.0", inputs_list(path)[j])
