@@ -40,6 +40,10 @@ photos = []
 
 
 def initial():
+    try:
+        remove()
+    except IndexError:
+        pass
     create_widgets(initial_length)
     insert(initial_path)
 
@@ -53,6 +57,10 @@ def inputs_list(path=initial_path):
     return inputs
 
 
+def check_length(path=initial_path):
+    return len(inputs_list(path))
+
+
 def create_widgets(number_of_entries):
     for i in range(number_of_entries):
         entries.append(tk.Text(widgets_frame, width=25, height=1))
@@ -64,20 +72,17 @@ def create_widgets(number_of_entries):
         buttons[i].grid(row=0 + i, column=1, padx=5, pady=5)
 
 
-current_range = len(inputs_list())
+current_range = check_length()
 # create_widgets_command = partial(create_widgets, current_range)
 
 
-def remove(path):
-    for j in range(len(inputs_list(path))):
-        entries[j].delete("1.0", tk.END)
-
-
-remove_from_path = partial(remove, initial_path)
+def remove():
+    for j in entries:
+        j.delete("1.0", tk.END)
 
 
 def insert(path):
-    for j in range(len(inputs_list(path))):
+    for j in range(check_length(path)):
         entries[j].insert("1.0", inputs_list(path)[j])
 
 
@@ -117,6 +122,7 @@ def open_file():
         inputs_list(root.filename)
         length = len(inputs_list(root.filename))
         create_widgets(length)
+        remove()
         insert(root.filename)
     except FileNotFoundError:
         pass
@@ -128,7 +134,7 @@ filemenu = tk.Menu(menubar, tearoff=0)
 filemenu.add_command(label="New", command=initial)
 filemenu.add_command(label="Open", command=open_file)
 filemenu.add_command(label="Save", command=save)
-filemenu.add_command(label="Clear", command=remove_from_path)
+filemenu.add_command(label="Clear", command=remove)
 filemenu.add_separator()
 filemenu.add_command(label="Exit", command=root.quit)
 menubar.add_cascade(label="File", menu=filemenu)
@@ -141,5 +147,4 @@ menubar.add_cascade(label="View", menu=viewmenu)
 
 root.config(menu=menubar)
 
-initial()
 root.mainloop()
