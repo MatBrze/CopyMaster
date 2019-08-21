@@ -91,6 +91,7 @@ def remove():
 def insert(path):
     for j in range(check_length(path)):
         entries[j].insert("1.0", inputs_list(path)[j])
+    reset()
 
 
 def copy(entry):
@@ -143,6 +144,12 @@ def open_file():
         insert(root.filename)
     except FileNotFoundError:
         pass
+
+
+def reset():
+    global entries, buttons
+    entries = []
+    buttons = []
 
 
 menubar = tk.Menu(menu_frame)
