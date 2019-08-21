@@ -83,10 +83,6 @@ def create_widgets(number_of_entries):
         buttons[i].grid(row=0 + i, column=1, padx=5, pady=5)
 
 
-current_range = check_length()
-# create_widgets_command = partial(create_widgets, current_range)
-
-
 def remove():
     for j in entries:
         j.delete("1.0", tk.END)
@@ -95,9 +91,6 @@ def remove():
 def insert(path):
     for j in range(check_length(path)):
         entries[j].insert("1.0", inputs_list(path)[j])
-
-
-# insert_from_path = partial(insert, input_path)
 
 
 def copy(entry):
