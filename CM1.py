@@ -107,6 +107,19 @@ def save():
     with open(initial_path, 'w', encoding="UTF-8") as f:
         for item in save_list:
             f.write("%s" % item)
+    f.close()
+
+
+def save_as():
+    f = filedialog.asksaveasfile(mode='w', defaultextension=".txt")
+    if f is None:  # asksaveasfile return `None` if dialog closed with "cancel".
+        return
+    save_list = []
+    for k in entries:
+        save_list.append(k.get("1.0", tk.END))
+    for item in save_list:
+        f.write("%s" % item)
+    f.close()
 
 
 def on_top():
@@ -138,6 +151,7 @@ filemenu = tk.Menu(menubar, tearoff=0)
 filemenu.add_command(label="New", command=new)
 filemenu.add_command(label="Open", command=open_file)
 filemenu.add_command(label="Save", command=save)
+filemenu.add_command(label="Save as...", command=save_as)
 filemenu.add_separator()
 filemenu.add_command(label="Exit", command=root.quit)
 menubar.add_cascade(label="File", menu=filemenu)
