@@ -10,14 +10,29 @@ root = tk.Tk()
 root.title("Copy Master 5000")
 
 menu_frame = tk.Frame(root)
-menu_frame.grid(row=0, column=1, columnspan=3)
+menu_frame.grid(row=0, column=1, columnspan=3, sticky='N,W')
 
 logo_frame = tk.Frame(root)
 logo_frame.grid(row=1, column=1, columnspan=3)
 
-widgets_frame = tk.Frame(root)
-widgets_frame.configure(background='#64727f')
-widgets_frame.grid(row=2, column=1, columnspan=3)
+frame_canvas = tk.Frame(root)
+frame_canvas.configure(background='#64727f')
+frame_canvas.grid(row=3, column=1, columnspan=3)
+
+canvas = tk.Canvas(frame_canvas)
+canvas.grid(row=0, column=1, sticky='news')
+
+
+scrollbar = tk.Scrollbar(frame_canvas, orient="vertical", command=canvas.yview)
+scrollbar.grid(row=0, column=3, sticky='ns')
+# canvas.configure(yscrollcommand=scrollbar.set)
+
+canvas.config(scrollregion=canvas.bbox("all"))
+canvas.config(width=270, height=400)
+
+widgets_frame = tk.Frame(canvas)
+canvas.create_window((0, 0), window=widgets_frame, anchor='nw')
+# widgets_frame.grid(row=0, column=0, sticky='N,W')
 
 
 def resource_path(relative_path):
@@ -81,6 +96,7 @@ def create_widgets(number_of_entries):
         action_with_arg = partial(copy, entries[i])
         buttons[i].config(image=photos[i], width="35", height="35", bg="#bdf2f5", command=action_with_arg)
         buttons[i].grid(row=0 + i, column=1, padx=5, pady=5)
+    print(widgets_frame.winfo_width())
 
 
 def remove():
