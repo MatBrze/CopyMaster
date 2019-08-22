@@ -17,22 +17,19 @@ logo_frame.grid(row=1, column=1, columnspan=3)
 
 frame_canvas = tk.Frame(root)
 frame_canvas.configure(background='#64727f')
-frame_canvas.grid(row=3, column=1, columnspan=3)
+frame_canvas.grid(row=3, column=1)
 
 canvas = tk.Canvas(frame_canvas)
 canvas.grid(row=0, column=1, sticky='news')
 
 
-scrollbar = tk.Scrollbar(frame_canvas, orient="vertical", command=canvas.yview)
+scrollbar = tk.Scrollbar(frame_canvas, orient="vertical")
 scrollbar.grid(row=0, column=3, sticky='ns')
-# canvas.configure(yscrollcommand=scrollbar.set)
-
-canvas.config(scrollregion=canvas.bbox("all"))
-canvas.config(width=270, height=400)
 
 widgets_frame = tk.Frame(canvas)
 canvas.create_window((0, 0), window=widgets_frame, anchor='nw')
-# widgets_frame.grid(row=0, column=0, sticky='N,W')
+canvas.config(scrollregion=canvas.bbox("all"))
+scrollbar.config(command=canvas.yview)
 
 
 def resource_path(relative_path):
@@ -96,7 +93,11 @@ def create_widgets(number_of_entries):
         action_with_arg = partial(copy, entries[i])
         buttons[i].config(image=photos[i], width="35", height="35", bg="#bdf2f5", command=action_with_arg)
         buttons[i].grid(row=0 + i, column=1, padx=5, pady=5)
-    print(widgets_frame.winfo_width())
+        root.update()
+    canvas_size = number_of_entries * 51
+    canvas.config(width=270, height=canvas_size)
+
+
 
 
 def remove():
