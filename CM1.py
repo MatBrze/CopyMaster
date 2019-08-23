@@ -50,11 +50,27 @@ photos = []
 
 
 def new():
-    if len(entries) == 10:
-        remove()
-    else:
-        create_widgets(initial_length)
-        remove()
+    for w in list(widgets_frame.children.values()):
+        w.grid_forget()
+    canvas.config(width=270, height=55)
+    no_entries_label = tk.Label(widgets_frame, text="Number of entries to create:")
+    no_entries_label.grid(row=0, column=2)
+
+    no_entries = tk.Entry(widgets_frame)
+    no_entries.grid(row=1, column=2, padx=10, pady=5)
+
+    create_button = tk.Button(widgets_frame, text="Create", bg="#bdf2f5")
+    create_button.grid(row=1, column=1, padx=10, pady=5)
+
+    def set_create():
+        try:
+            create_widgets(int(no_entries.get()))
+        except ValueError:
+            action_with_arg = partial(create_widgets, 10)
+            create_button.config(command=action_with_arg)
+
+    create_button.config(command=set_create)
+    remove()
 
 
 def initial():
@@ -80,9 +96,11 @@ def check_length(path=initial_path):
 
 
 def create_widgets(number_of_entries):
-    if len(entries) > 0:
-        for w in list(widgets_frame.children.values()):
-            w.grid_forget()
+    global entries, buttons
+    entries = []
+    buttons = []
+    for w in list(widgets_frame.children.values()):
+        w.grid_forget()
     for i in range(number_of_entries):
         entries.append(tk.Text(widgets_frame, width=25, height=1))
         entries[i].grid(row=0 + i, column=2, columnspan=3, padx=10, pady=5)
@@ -92,7 +110,7 @@ def create_widgets(number_of_entries):
         buttons[i].config(image=photos[i], width="35", height="35", bg="#bdf2f5", command=action_with_arg)
         buttons[i].grid(row=0 + i, column=1, padx=5, pady=5)
         root.update()
-    if number_of_entries > 10:
+    if number_of_entries >= 10:
         canvas.config(width=270, height=510)
         scrollbar.config(command=canvas.yview)
         canvas.config(scrollregion=canvas.bbox("all"))
@@ -164,12 +182,6 @@ def open_file():
         insert(root.filename)
     except FileNotFoundError:
         pass
-
-
-# def reset():
-#     global entries, buttons
-#     entries = []
-#     buttons = []
 
 
 menubar = tk.Menu(menu_frame)
