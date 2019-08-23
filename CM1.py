@@ -28,8 +28,6 @@ scrollbar.grid(row=0, column=3, sticky='ns')
 
 widgets_frame = tk.Frame(canvas)
 canvas.create_window((0, 0), window=widgets_frame, anchor='nw')
-canvas.config(scrollregion=canvas.bbox("all"))
-scrollbar.config(command=canvas.yview)
 
 
 def resource_path(relative_path):
@@ -94,10 +92,15 @@ def create_widgets(number_of_entries):
         buttons[i].config(image=photos[i], width="35", height="35", bg="#bdf2f5", command=action_with_arg)
         buttons[i].grid(row=0 + i, column=1, padx=5, pady=5)
         root.update()
-    canvas_size = number_of_entries * 51
-    canvas.config(width=270, height=canvas_size)
-
-
+    if number_of_entries > 10:
+        canvas.config(width=270, height=510)
+        scrollbar.config(command=canvas.yview)
+        canvas.config(scrollregion=canvas.bbox("all"))
+    else:
+        canvas_size = number_of_entries * 51
+        canvas.config(width=270, height=canvas_size)
+        scrollbar.config(command=canvas.yview)
+        canvas.config(scrollregion=canvas.bbox("all"))
 
 
 def remove():
@@ -108,7 +111,7 @@ def remove():
 def insert(path):
     for j in range(check_length(path)):
         entries[j].insert("1.0", inputs_list(path)[j])
-    reset()
+    # reset()
 
 
 def copy(entry):
@@ -163,16 +166,17 @@ def open_file():
         pass
 
 
-def reset():
-    global entries, buttons
-    entries = []
-    buttons = []
+# def reset():
+#     global entries, buttons
+#     entries = []
+#     buttons = []
 
 
 menubar = tk.Menu(menu_frame)
 
 filemenu = tk.Menu(menubar, tearoff=0)
 filemenu.add_command(label="New", command=new)
+filemenu.add_command(label="Clear", command=remove)
 filemenu.add_command(label="Open", command=open_file)
 filemenu.add_command(label="Save", command=save)
 filemenu.add_command(label="Save as...", command=save_as)
