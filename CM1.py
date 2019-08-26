@@ -9,6 +9,11 @@ from functools import partial
 root = tk.Tk()
 root.title("Copy Master 5000")
 
+
+def _on_mousewheel(event):
+    canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+
+
 menu_frame = tk.Frame(root)
 menu_frame.grid(row=0, column=1, columnspan=3, sticky='N,W')
 
@@ -21,6 +26,7 @@ frame_canvas.grid(row=3, column=1)
 
 canvas = tk.Canvas(frame_canvas)
 canvas.grid(row=0, column=1, sticky='news')
+root.bind_all("<MouseWheel>", _on_mousewheel)
 
 
 scrollbar = tk.Scrollbar(frame_canvas, orient="vertical")
