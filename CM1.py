@@ -2,6 +2,7 @@ import sys
 import os
 import tkinter as tk
 from tkinter import filedialog
+from tkinter.colorchooser import *
 from PIL import ImageTk, Image
 from functools import partial
 
@@ -190,6 +191,17 @@ def open_file():
         pass
 
 
+def button_color():
+    color = askcolor()
+    for widget in buttons:
+        widget.configure(bg=color[1])
+
+
+def background_color():
+    color = askcolor()
+    widgets_frame.configure(bg=color[1])
+
+
 menubar = tk.Menu(menu_frame)
 
 filemenu = tk.Menu(menubar, tearoff=0)
@@ -205,6 +217,8 @@ menubar.add_cascade(label="File", menu=filemenu)
 viewmenu = tk.Menu(menubar, tearoff=0)
 viewmenu.add_command(label="On Top", command=on_top)
 viewmenu.add_command(label="Off Top", command=off_top)
+viewmenu.add_command(label="Buttons color", command=button_color)
+viewmenu.add_command(label="Background color", command=background_color)
 menubar.add_cascade(label="View", menu=viewmenu)
 
 initial()
